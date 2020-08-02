@@ -23,8 +23,8 @@ public class CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
 
-    public List<Company> getCompanies() {
-        return companyRepository.findAll();
+    public List<CompanyResponse> getCompanies() {
+        return companyRepository.findAll().stream().map(CompanyMapper.INSTANCE::companyToCompanyResponse).collect(Collectors.toList());
     }
 
     public Page<CompanyResponse> getCompaniesPage(int page, int pageSize) {

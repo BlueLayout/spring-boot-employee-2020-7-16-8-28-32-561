@@ -3,6 +3,7 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.Exception.IllegalUpdateCompanyException;
 import com.thoughtworks.springbootemployee.Exception.NoSuchCompanyException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
+import com.thoughtworks.springbootemployee.dto.CompanyResponse;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -42,7 +43,7 @@ class CompanyServiceTest {
         when(companyRepository.findAll()).thenReturn(getMockCompanies());
 
         //when
-        List<Company> companies = companyService.getCompanies();
+        List<CompanyResponse> companies = companyService.getCompanies();
 
         //then
         assertEquals(10, companies.size());
