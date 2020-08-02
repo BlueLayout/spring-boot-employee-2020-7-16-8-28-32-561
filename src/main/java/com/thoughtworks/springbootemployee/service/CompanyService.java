@@ -34,8 +34,9 @@ public class CompanyService {
         return new PageImpl<>(companyResponses,PageRequest.of(page-1, pageSize),companyResponses.size());
     }
 
-    public Company getCompany(int id) {
-        return companyRepository.findById(id).orElse(null);
+    public CompanyResponse getCompany(int id) {
+        Company company = companyRepository.findById(id).orElse(null);
+        return CompanyMapper.INSTANCE.companyToCompanyResponse(company);
     }
 
 
