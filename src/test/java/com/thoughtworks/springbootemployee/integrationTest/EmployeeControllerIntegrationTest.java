@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.integrationTest;
 
+import com.alibaba.fastjson.JSONObject;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -111,26 +112,19 @@ public class EmployeeControllerIntegrationTest {
     @Test
     void should_return_employee_when_addEmployee_given_employee() throws Exception {
         //given
-        String employeeString = "{\n" +
-                "    \"id\": 1,\n" +
-                "    \"name\": \"Devin\",\n" +
-                "    \"age\": 18,\n" +
-                "    \"gender\": \"male\",\n" +
-                "    \"salary\": 3000,\n" +
-                "    \"companyId\": 1\n" +
-                "}";
-        Company oocl = companyRepository.save(new Company(1, "oocl", 1, emptyList()));
+        String employeeInfo = JSONObject.toJSONString(new Employee(1, "Devin", 18, "male", new BigDecimal(3000), 1));
+        Company companyOOCL = companyRepository.save(new Company(1, "oocl", 1, emptyList()));
 
         //when
         mockMvc.perform(post("/employees").contentType(MediaType.APPLICATION_JSON)
-                .content(employeeString))
+                .content(employeeInfo))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").value("Devin"))
                 .andExpect(jsonPath("$.age").value(18))
                 .andExpect(jsonPath("$.gender").value("male"))
                 .andExpect(jsonPath("$.salary").isNumber())
-                .andExpect(jsonPath("$.companyId").value(1));
+                .andExpect(jsonPath("$.companyId").value(companyOOCL.getId()));
     }
 
     @Test
