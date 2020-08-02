@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,13 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping(params = {"page", "pageSize"})
-    public Page<Employee> getEmployeePage(@RequestParam(value = "page") Integer page,
-                                          @RequestParam(value = "pageSize") Integer pageSize) {
+    public Page<EmployeeResponse> getEmployeePage(@RequestParam(value = "page") Integer page,
+                                                  @RequestParam(value = "pageSize") Integer pageSize) {
         return employeeService.queryEmployeesByPage(page, pageSize);
     }
 
     @GetMapping(params = {"gender"})
-    public List<Employee> getEmployeesByGender(@RequestParam(value = "gender") String gender) {
+    public List<EmployeeResponse> getEmployeesByGender(@RequestParam(value = "gender") String gender) {
         return employeeService.queryEmployeesByGender(gender);
     }
 

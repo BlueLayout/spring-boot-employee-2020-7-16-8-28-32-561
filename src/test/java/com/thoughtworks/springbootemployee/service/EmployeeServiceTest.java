@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.Exception.IllegalUpdateEmployeeException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,7 @@ class EmployeeServiceTest {
         //given
         when(employeeRepository.findAllByGender(any())).thenReturn(emptyList());
         //when
-        List<Employee> employees = employeeService.queryEmployeesByGender(MALE);
+        List<EmployeeResponse> employees = employeeService.queryEmployeesByGender(MALE);
 
         //then
         assertNotNull(employees);
@@ -65,7 +66,7 @@ class EmployeeServiceTest {
         when(employeeRepository.findAll(isA(PageRequest.class))).thenReturn(employeeswithPage);
 
         //when
-        Page<Employee> employees = employeeService.queryEmployeesByPage(1, 2);
+        Page<EmployeeResponse> employees = employeeService.queryEmployeesByPage(1, 2);
 
         //then
         assertEquals(2, employees.getSize());

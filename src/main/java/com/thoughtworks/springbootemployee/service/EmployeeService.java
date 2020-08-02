@@ -3,14 +3,18 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.Exception.IllegalUpdateEmployeeException;
 import com.thoughtworks.springbootemployee.Exception.NoSuchEmployeeException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -23,12 +27,16 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public List<Employee> queryEmployeesByGender(String gender) {
-        return employeeRepository.findAllByGender(gender);
+    public List<EmployeeResponse> queryEmployeesByGender(String gender) {
+        return employeeRepository.findAllByGender(gender).stream()
+                .map(EmployeeMapper.INSTANCE::employeeToEmployeeResponse).collect(Collectors.toList());
     }
 
-    public Page<Employee> queryEmployeesByPage(int currentPage, int pageSize) {
-        return employeeRepository.findAll(PageRequest.of(currentPage-1, pageSize));
+    public Page<EmployeeResponse> queryEmployeesByPage(int currentPage, int pageSize) {
+        List<Employee> employees = employeeRepository.findAll();
+        List<EmployeeResponse> employeeResponses = employees.stream().map(EmployeeMapper.INSTANCE::employeeToEmployeeResponse)
+                .collect(Collectors.toList());
+        return new PageImpl<>(employeeResponses, PageRequest.of(currentPage - 1, pageSize), employeeResponses.size());
     }
 
     public Employee queryEmployee(int employeeId) {
@@ -39,7 +47,7 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    public Employee updateEmployee(Integer id, Employee employee){
+    public Employee updateEmployee(Integer id, Employee employee) {
         if (!id.equals(employee.getId())) {
             throw new IllegalUpdateEmployeeException(ExceptionMessage.ILLEGAL_UPDATE_EMPLOYEE.getErrorMsg());
         }
@@ -62,10 +70,10 @@ public class EmployeeService {
         return employeeRepository.save(oldEmployee);
     }
 
-    public void deleteEmployee(int employeeId){
+    public void deleteEmployee(int employeeId) {
         Employee employee = employeeRepository.findById(employeeId).orElse(null);
         if (employee == null) {
-            throw new NoSuchEmployeeException(ExceptionMessage.NO_SUCH_EMPLOYEE .getErrorMsg());
+            throw new NoSuchEmployeeException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg());
         }
         employeeRepository.deleteById(employeeId);
     }
