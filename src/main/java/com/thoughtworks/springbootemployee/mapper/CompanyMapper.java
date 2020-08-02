@@ -6,7 +6,10 @@ import com.thoughtworks.springbootemployee.model.Company;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
+
+@Mapper(componentModel = "spring",
+    nullValueCheckStrategy = ALWAYS)
 public interface CompanyMapper {
 
     CompanyMapper INSTANCE = Mappers.getMapper(CompanyMapper.class);

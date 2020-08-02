@@ -4,12 +4,14 @@ import com.thoughtworks.springbootemployee.dto.EmployeeRequest;
 import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.model.Employee;
 import org.mapstruct.Mapper;
-import org.mapstruct.NullValueMappingStrategy;
 import org.mapstruct.factory.Mappers;
+
+import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
+import static org.mapstruct.NullValueMappingStrategy.RETURN_DEFAULT;
 
 
 @Mapper(componentModel = "spring",
-    nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
+    nullValueCheckStrategy = ALWAYS)
 public interface EmployeeMapper {
 
     EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
