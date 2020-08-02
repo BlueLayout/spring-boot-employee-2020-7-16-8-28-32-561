@@ -3,7 +3,9 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.Exception.IllegalUpdateCompanyException;
 import com.thoughtworks.springbootemployee.Exception.NoSuchCompanyException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
+import com.thoughtworks.springbootemployee.dto.CompanyRequest;
 import com.thoughtworks.springbootemployee.dto.CompanyResponse;
+import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -93,7 +95,8 @@ class CompanyServiceTest {
         when(companyRepository.save(any())).thenReturn(any());
 
         //when
-        Company company = companyService.createCompany(getMockCompany());
+        CompanyRequest companyRequest = CompanyMapper.INSTANCE.companyToCompanyRequest(getMockCompany());
+        companyService.createCompany(companyRequest);
 
         //then
         verify(companyRepository).save(any());
@@ -106,7 +109,7 @@ class CompanyServiceTest {
         when(companyRepository.findById(COMPANY_ID)).thenReturn(Optional.of(getMockCompany()));
 
         //when
-        Company companyUpdated = companyService.updateCompany(COMPANY_ID, getMockCompany());
+        companyService.updateCompany(COMPANY_ID, getMockCompany());
         //then
         verify(companyRepository).findById(COMPANY_ID);
         verify(companyRepository).save(isA(Company.class));

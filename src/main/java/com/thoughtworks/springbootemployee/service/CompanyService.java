@@ -3,6 +3,7 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.Exception.IllegalUpdateCompanyException;
 import com.thoughtworks.springbootemployee.Exception.NoSuchCompanyException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
+import com.thoughtworks.springbootemployee.dto.CompanyRequest;
 import com.thoughtworks.springbootemployee.dto.CompanyResponse;
 import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
 import com.thoughtworks.springbootemployee.model.Company;
@@ -48,8 +49,10 @@ public class CompanyService {
         return company.getEmployees();
     }
 
-    public Company createCompany(Company company) {
-        return companyRepository.save(company);
+    public CompanyResponse createCompany(CompanyRequest companyRequest) {
+        Company company = CompanyMapper.INSTANCE.companyRequestToCompany(companyRequest);
+        Company companySave = companyRepository.save(company);
+        return CompanyMapper.INSTANCE.companyToCompanyResponse(companySave);
     }
 
     public Company updateCompany(int companyId, Company company){
