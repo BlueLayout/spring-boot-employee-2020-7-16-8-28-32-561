@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.dto.CompanyResponse;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.CompanyService;
@@ -18,8 +19,8 @@ public class CompanyController {
     private CompanyService companyService;
 
     @GetMapping(params = {"page", "pageSize"})
-    public Page<Company> getCompaniesInPage(@RequestParam(value = "page") Integer page,
-                                            @RequestParam(value = "pageSize") Integer pageSize) {
+    public Page<CompanyResponse> getCompaniesInPage(@RequestParam(value = "page") Integer page,
+                                                    @RequestParam(value = "pageSize") Integer pageSize) {
         return companyService.getCompaniesPage(page, pageSize);
     }
 

@@ -3,16 +3,20 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.Exception.IllegalUpdateCompanyException;
 import com.thoughtworks.springbootemployee.Exception.NoSuchCompanyException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
+import com.thoughtworks.springbootemployee.dto.CompanyResponse;
+import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyService {
@@ -23,8 +27,11 @@ public class CompanyService {
         return companyRepository.findAll();
     }
 
-    public Page<Company> getCompaniesPage(int page, int pageSize) {
-        return companyRepository.findAll(PageRequest.of(page-1, pageSize));
+    public Page<CompanyResponse> getCompaniesPage(int page, int pageSize) {
+        List<Company> companies = companyRepository.findAll();
+        List<CompanyResponse> companyResponses = companies.stream().map(CompanyMapper.INSTANCE::companyToCompanyResponse)
+                .collect(Collectors.toList());
+        return new PageImpl<>(companyResponses,PageRequest.of(page-1, pageSize),companyResponses.size());
     }
 
     public Company getCompany(int id) {
