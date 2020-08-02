@@ -3,6 +3,7 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.Exception.IllegalUpdateEmployeeException;
 import com.thoughtworks.springbootemployee.Exception.NoSuchEmployeeException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
+import com.thoughtworks.springbootemployee.dto.EmployeeRequest;
 import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Employee;
@@ -45,8 +46,10 @@ public class EmployeeService {
         return EmployeeMapper.INSTANCE.employeeToEmployeeResponse(employee);
     }
 
-    public Employee createEmployee(Employee employee) {
-        return employeeRepository.save(employee);
+    public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
+        Employee employee = EmployeeMapper.INSTANCE.employeeRequestToEmployee(employeeRequest);
+        Employee employeeSave =  employeeRepository.save(employee);
+        return EmployeeMapper.INSTANCE.employeeToEmployeeResponse(employeeSave);
     }
 
     public Employee updateEmployee(Integer id, Employee employee) {

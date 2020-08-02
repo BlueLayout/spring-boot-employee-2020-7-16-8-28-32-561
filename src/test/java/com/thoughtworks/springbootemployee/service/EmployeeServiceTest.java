@@ -2,7 +2,9 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.Exception.IllegalUpdateEmployeeException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
+import com.thoughtworks.springbootemployee.dto.EmployeeRequest;
 import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
@@ -90,7 +92,8 @@ class EmployeeServiceTest {
         when(employeeRepository.save(any())).thenReturn(any());
 
         //when
-        Employee employee = employeeService.createEmployee(new Employee(11, "tom chen", 18, "Male", new BigDecimal(9999), 1));
+        EmployeeRequest employeeRequest = EmployeeMapper.INSTANCE.employeeToEmployeeRequest(new Employee(11, "tom chen", 18, "Male", new BigDecimal(9999), 1));
+        employeeService.createEmployee(employeeRequest);
 
         //then
         verify(employeeRepository).save(any());
@@ -101,9 +104,10 @@ class EmployeeServiceTest {
         //given
         when(employeeRepository.save(any())).thenReturn(null);
         //when
-        Employee employee = employeeService.createEmployee(new Employee(1, "tom chen", 18, "Male", new BigDecimal(9999), 1));
+        EmployeeRequest employeeRequest = EmployeeMapper.INSTANCE.employeeToEmployeeRequest(new Employee(11, "tom chen", 18, "Male", new BigDecimal(9999), 1));
+        EmployeeResponse employeeResponse = employeeService.createEmployee(employeeRequest);
         //then
-        assertNull(employee);
+        assertNull(employeeResponse);
     }
 
     @Test
