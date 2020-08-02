@@ -62,9 +62,9 @@ public class EmployeeControllerIntegrationTest {
     @Test
     void should_return_male_employees_when_getEmployeesByGender_given_employees() throws Exception {
         //given
-        Company oocl = companyRepository.save(new Company(1, "oocl", 1, emptyList()));
-        Employee devin = employeeRepository.save(new Employee(1, "Devin", 22, "male", new BigDecimal(9999), oocl.getId()));
-        Employee xiaoHong = employeeRepository.save(new Employee(2, "xiaohong", 22, "female", new BigDecimal(9999), oocl.getId()));
+        Company companyOOCL = companyRepository.save(new Company(1, "oocl", 1, emptyList()));
+        employeeRepository.save(new Employee(1, "Devin", 22, "male", new BigDecimal(9999), companyOOCL.getId()));
+        employeeRepository.save(new Employee(2, "xiaohong", 22, "female", new BigDecimal(9999), companyOOCL.getId()));
 
         String gender = "male";
 
