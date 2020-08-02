@@ -89,18 +89,19 @@ public class CompanyControllerIntegrationTest {
     @Test
     void should_return_employee_in_this_company_when_get_given_id_of_company() throws Exception {
         //given
-        Company company = new Company(1, "oocl", 1, emptyList());
-        companyRepository.save(company);
-        Employee employee = new Employee(1, "jack", 23, "male", new BigDecimal(9999), 1);
-        employeeRepository.save(employee);
+        Company companyOOCL = companyRepository.save(new Company(1, "oocl", 1, emptyList()));
+        Employee employeeJack = employeeRepository.save(new Employee(1, "jack", 23, "male", new BigDecimal(9999), 1));
 
         //when
-        mockMvc.perform(get("/companies/" + company.getId() + "/employees").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/companies/" + companyOOCL.getId() + "/employees").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id").isNumber());
-
-        //then
+                .andExpect(jsonPath("$[0].id").value(employeeJack.getId()))
+                .andExpect(jsonPath("$[0].name").value(employeeJack.getName()))
+                .andExpect(jsonPath("$[0].age").value(employeeJack.getAge()))
+                .andExpect(jsonPath("$[0].gender").value(employeeJack.getGender()))
+                .andExpect(jsonPath("$[0].salary").isNumber())
+                .andExpect(jsonPath("$[0].companyId").value(employeeJack.getCompanyId()));
 
     }
 
