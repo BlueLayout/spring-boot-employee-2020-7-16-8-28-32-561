@@ -78,10 +78,10 @@ class EmployeeServiceTest {
         when(employeeRepository.findById(any())).thenReturn(Optional.of(new Employee(1, "xx", 18, "Male", new BigDecimal(2), 1)));
 
         //when
-        Employee employee = employeeService.queryEmployee(EMPLOYEE_ID);
+        EmployeeResponse employeeResponse = employeeService.queryEmployee(EMPLOYEE_ID);
 
         //then
-        assertNotNull(employee);
+        assertNotNull(employeeResponse);
     }
 
     @Test

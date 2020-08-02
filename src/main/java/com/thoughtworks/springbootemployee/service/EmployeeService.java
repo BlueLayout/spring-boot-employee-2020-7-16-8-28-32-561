@@ -40,8 +40,9 @@ public class EmployeeService {
         return new PageImpl<>(employeeResponses, PageRequest.of(currentPage - 1, pageSize), employeeResponses.size());
     }
 
-    public Employee queryEmployee(int employeeId) {
-        return employeeRepository.findById(employeeId).orElse(null);
+    public EmployeeResponse queryEmployee(int employeeId) {
+        Employee employee = employeeRepository.findById(employeeId).orElse(null);
+        return EmployeeMapper.INSTANCE.employeeToEmployeeResponse(employee);
     }
 
     public Employee createEmployee(Employee employee) {
