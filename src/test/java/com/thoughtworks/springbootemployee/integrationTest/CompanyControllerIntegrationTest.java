@@ -75,7 +75,7 @@ public class CompanyControllerIntegrationTest {
     @Test
     void should_return_company_has_id_when_get_given_id() throws Exception {
         //given
-        Company companyAlibaba = companyRepository.save(new Company(1, "alibaba", 1, emptyList()));
+        companyRepository.save(new Company(1, "alibaba", 1, emptyList()));
         Company companyOOCL = companyRepository.save(new Company(2, "oocl", 1, emptyList()));
 
         //when
