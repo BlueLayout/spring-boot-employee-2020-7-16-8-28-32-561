@@ -149,11 +149,11 @@ public class EmployeeControllerIntegrationTest {
     @Test
     void should_return_status_is_ok_when_deleteEmployee_given_id() throws Exception {
         //given
-        Company oocl = companyRepository.save(new Company(1, "oocl", 1, emptyList()));
-        Employee save = employeeRepository.save(new Employee(1, "Devin", 22, "male", new BigDecimal(9999), oocl.getId()));
+        Company companyOOCL = companyRepository.save(new Company(1, "oocl", 1, emptyList()));
+        Employee employeeDevin = employeeRepository.save(new Employee(1, "Devin", 22, "male", new BigDecimal(9999), companyOOCL.getId()));
 
         //when
-        mockMvc.perform(delete("/employees/" + save.getId()).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete("/employees/" + employeeDevin.getId()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 }
