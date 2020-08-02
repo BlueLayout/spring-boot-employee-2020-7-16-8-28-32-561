@@ -130,26 +130,20 @@ public class EmployeeControllerIntegrationTest {
     @Test
     void should_return_employee_when_update_employee_given_id_and_employee() throws Exception {
         //given
-        Company oocl = companyRepository.save(new Company(1, "oocl", 1, emptyList()));
-        Employee save = employeeRepository.save(new Employee(1, "Devin", 22, "male", new BigDecimal(9999), oocl.getId()));
-        String employeeString = "{\n" +
-                "    \"id\": " + save.getId() + ",\n" +
-                "    \"name\": \"Devin\",\n" +
-                "    \"age\": 30,\n" +
-                "    \"gender\": \"male\",\n" +
-                "    \"salary\": 3000,\n" +
-                "    \"companyId\": 1\n" +
-                "}";
+        Company companyOOCL = companyRepository.save(new Company(1, "oocl", 1, emptyList()));
+        Employee employeeDevin = employeeRepository.save(new Employee(1, "Devin", 22, "male", new BigDecimal(9999), companyOOCL.getId()));
+        String updateEmployeeInfo = JSONObject.toJSONString(new Employee(employeeDevin.getId(), "Devin", 30, "male", new BigDecimal(3000), 1));
+
         //when
-        mockMvc.perform(put("/employees/" + save.getId()).contentType(MediaType.APPLICATION_JSON)
-                .content(employeeString))
+        mockMvc.perform(put("/employees/" + employeeDevin.getId()).contentType(MediaType.APPLICATION_JSON)
+                .content(updateEmployeeInfo))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").value("Devin"))
                 .andExpect(jsonPath("$.age").value(30))
                 .andExpect(jsonPath("$.gender").value("male"))
                 .andExpect(jsonPath("$.salary").isNumber())
-                .andExpect(jsonPath("$.companyId").value(oocl.getId()));
+                .andExpect(jsonPath("$.companyId").value(companyOOCL.getId()));
     }
 
     @Test
