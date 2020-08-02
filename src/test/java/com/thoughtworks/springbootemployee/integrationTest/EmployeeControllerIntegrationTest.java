@@ -4,8 +4,8 @@ import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -32,7 +32,7 @@ public class EmployeeControllerIntegrationTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     void clearAllBefore() {
         employeeRepository.deleteAll();
         companyRepository.deleteAll();
@@ -42,9 +42,6 @@ public class EmployeeControllerIntegrationTest {
     private void clearAll() {
         employeeRepository.deleteAll();
         companyRepository.deleteAll();
-        System.out.println("ceshi123");
-        System.out.println(companyRepository.findAll());
-        System.out.println(employeeRepository.findAll());
     }
 
     @Test
