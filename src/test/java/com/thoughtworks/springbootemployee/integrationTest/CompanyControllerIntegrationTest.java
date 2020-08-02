@@ -109,7 +109,7 @@ public class CompanyControllerIntegrationTest {
     @Test
     void should_return_company_when_post_given_company() throws Exception {
         //given
-        String companyInfo = JSONObject.toJSONString(new Company(1,"alibaba",0,emptyList()));
+        String companyInfo = JSONObject.toJSONString(new Company(1, "alibaba", 0, emptyList()));
 
         //when
         mockMvc.perform(post("/companies").contentType(MediaType.APPLICATION_JSON)
@@ -122,34 +122,24 @@ public class CompanyControllerIntegrationTest {
     @Test
     void should_return_updated_company_when_put_given_company_id() throws Exception {
         //given
-        String companyInfo = "{\n" +
-                "    \"id\": 1,\n" +
-                "    \"companyName\": \"alibaba\",\n" +
-                "    \"employeeNumber\": 0,\n" +
-                "    \"employees\": []\n" +
-                "}";
-        Company company = new Company(1, "tencent", 1, emptyList());
-        Company companySaved = companyRepository.save(company);
+        String companyInfo = JSONObject.toJSONString(new Company(1, "alibaba", 0, emptyList()));
+        Company companyTencent = companyRepository.save(new Company(1, "tencent", 1, emptyList()));
 
         //when
-        mockMvc.perform(put("/companies/" + companySaved.getId()).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put("/companies/" + companyTencent.getId()).contentType(MediaType.APPLICATION_JSON)
                 .content(companyInfo))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(company.getId()))
+                .andExpect(jsonPath("$.id").value(companyTencent.getId()))
                 .andExpect(jsonPath("$.companyName").value("alibaba"));
-
-        //then
     }
 
     @Test
     void should_return_status_ok_when_delete_given_company_id() throws Exception {
         //given
-        Company company = new Company(1, "tencent", 1, emptyList());
-        companyRepository.save(company);
+        Company companyTencent = companyRepository.save(new Company(1, "tencent", 1, emptyList()));
 
         //when
-        mockMvc.perform(delete("/companies/1").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete("/companies/" + companyTencent.getId()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        //then
     }
 }
