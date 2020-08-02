@@ -48,31 +48,31 @@ public class EmployeeService {
 
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
         Employee employee = EmployeeMapper.INSTANCE.employeeRequestToEmployee(employeeRequest);
-        Employee employeeSave =  employeeRepository.save(employee);
+        Employee employeeSave = employeeRepository.save(employee);
         return EmployeeMapper.INSTANCE.employeeToEmployeeResponse(employeeSave);
     }
 
-    public Employee updateEmployee(Integer id, Employee employee) {
-        if (!id.equals(employee.getId())) {
+    public EmployeeResponse updateEmployee(Integer id, EmployeeRequest employeeRequest) {
+        if (!id.equals(employeeRequest.getId())) {
             throw new IllegalUpdateEmployeeException(ExceptionMessage.ILLEGAL_UPDATE_EMPLOYEE.getErrorMsg());
         }
         Employee oldEmployee = employeeRepository.findById(id).orElse(null);
         if (oldEmployee == null) {
             throw new NoSuchEmployeeException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg());
         }
-        if (employee.getName() != null) {
-            oldEmployee.setName(employee.getName());
+        if (employeeRequest.getName() != null) {
+            oldEmployee.setName(employeeRequest.getName());
         }
-        if (employee.getAge() > 0) {
-            oldEmployee.setAge(employee.getAge());
+        if (employeeRequest.getAge() > 0) {
+            oldEmployee.setAge(employeeRequest.getAge());
         }
-        if (employee.getGender() != null) {
-            oldEmployee.setGender(employee.getGender());
+        if (employeeRequest.getGender() != null) {
+            oldEmployee.setGender(employeeRequest.getGender());
         }
-        if (employee.getSalary() != null) {
-            oldEmployee.setSalary(employee.getSalary());
+        if (employeeRequest.getSalary() != null) {
+            oldEmployee.setSalary(employeeRequest.getSalary());
         }
-        return employeeRepository.save(oldEmployee);
+        return EmployeeMapper.INSTANCE.employeeToEmployeeResponse(employeeRepository.save(oldEmployee));
     }
 
     public void deleteEmployee(int employeeId) {

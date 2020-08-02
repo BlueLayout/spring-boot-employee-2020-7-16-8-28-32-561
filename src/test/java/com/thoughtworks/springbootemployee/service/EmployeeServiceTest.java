@@ -118,7 +118,8 @@ class EmployeeServiceTest {
         when(employeeRepository.findById(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
 
         //when
-        Employee employeeUpdated = employeeService.updateEmployee(EMPLOYEE_ID, employee);
+        EmployeeRequest employeeRequest = EmployeeMapper.INSTANCE.employeeToEmployeeRequest(employee);
+        EmployeeResponse employeeUpdated = employeeService.updateEmployee(EMPLOYEE_ID, employeeRequest);
 
         //then
         assertNotNull(employeeUpdated);
@@ -127,10 +128,10 @@ class EmployeeServiceTest {
     @Test
     void should_return_employee_when_updateEmployee_given_new_employee() throws Exception {
         //given
-        Employee employee = new Employee(2, "xiaoshiyi", 18, "Male", new BigDecimal(5000), 1);
+        EmployeeRequest employeeRequest = new EmployeeRequest(2, "xiaoshiyi", 18, "Male", new BigDecimal(5000), 1);
 
         //when
-        Throwable exception = assertThrows(IllegalUpdateEmployeeException.class, () -> employeeService.updateEmployee(EMPLOYEE_ID, employee));
+        Throwable exception = assertThrows(IllegalUpdateEmployeeException.class, () -> employeeService.updateEmployee(EMPLOYEE_ID, employeeRequest));
 
         //then
         assertEquals(ExceptionMessage.ILLEGAL_UPDATE_EMPLOYEE.getErrorMsg(), exception.getMessage());
