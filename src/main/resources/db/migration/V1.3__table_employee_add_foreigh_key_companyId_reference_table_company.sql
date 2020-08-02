@@ -1,0 +1,1 @@
+alter table employee add foreign key(companyId) references company(id);

@@ -1,0 +1,1 @@
+alter table employee ADD column companyId INT;
