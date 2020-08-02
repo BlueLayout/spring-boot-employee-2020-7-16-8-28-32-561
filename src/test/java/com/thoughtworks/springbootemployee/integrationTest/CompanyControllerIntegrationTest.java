@@ -5,6 +5,7 @@ import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,6 +31,11 @@ public class CompanyControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @BeforeEach
+    private void clearAllBefore() {
+        companyRepository.deleteAll();
+        employeeRepository.deleteAll();
+    }
 
     @AfterEach
     private void clearAll() {
@@ -50,7 +56,6 @@ public class CompanyControllerIntegrationTest {
                 .andExpect(jsonPath("$.content", hasSize(1)))
                 .andExpect(jsonPath("$.content[0].id").value(1));
 
-        //then
     }
 
     @Test
@@ -65,23 +70,20 @@ public class CompanyControllerIntegrationTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id").isNumber());
 
-        //then
-
     }
 
     @Test
     void should_return_company_has_id_when_get_given_id() throws Exception {
         //given
-        Company company = new Company(1, "alibaba", 1, emptyList());
-        companyRepository.save(company);
-        companyRepository.save(new Company(2, "oocl", 1, emptyList()));
+        Company companyAlibaba = companyRepository.save(new Company(1, "alibaba", 1, emptyList()));
+        Company companyOOCL = companyRepository.save(new Company(2, "oocl", 1, emptyList()));
 
         //when
-        mockMvc.perform(get("/companies/" + company.getId()).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/companies/" + companyOOCL.getId()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(company.getId()));
-
-
+                .andExpect(jsonPath("$.id").value(companyOOCL.getId()))
+                .andExpect(jsonPath("$.companyName").value(companyOOCL.getCompanyName()))
+                .andExpect(jsonPath("$.employeeNumber").value(companyOOCL.getEmployeeNumber()));
     }
 
     @Test
