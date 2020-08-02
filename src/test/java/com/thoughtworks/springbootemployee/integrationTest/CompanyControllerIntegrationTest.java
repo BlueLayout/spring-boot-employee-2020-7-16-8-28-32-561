@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.integrationTest;
 
+import com.alibaba.fastjson.JSONObject;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -108,20 +109,13 @@ public class CompanyControllerIntegrationTest {
     @Test
     void should_return_company_when_post_given_company() throws Exception {
         //given
-        String companyInfo = "{\n" +
-                "    \"id\": 1,\n" +
-                "    \"companyName\": \"alibaba\",\n" +
-                "    \"employeeNumber\": 0,\n" +
-                "    \"employees\": []\n" +
-                "}";
+        String companyInfo = JSONObject.toJSONString(new Company(1,"alibaba",0,emptyList()));
 
         //when
         mockMvc.perform(post("/companies").contentType(MediaType.APPLICATION_JSON)
                 .content(companyInfo))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1));
-
-        //then
 
     }
 
