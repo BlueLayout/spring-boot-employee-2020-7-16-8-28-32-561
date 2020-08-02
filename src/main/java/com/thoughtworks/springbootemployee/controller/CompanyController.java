@@ -1,6 +1,8 @@
 package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.dto.CompanyResponse;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.CompanyService;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/companies")
@@ -35,8 +38,9 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}/employees")
-    public List<Employee> getEmployeeFromCompany(@PathVariable int id) {
-        return companyService.getCompany(id).getEmployees();
+    public List<EmployeeResponse> getEmployeeFromCompany(@PathVariable int id) {
+        return companyService.getCompany(id).getEmployees()
+                .stream().map(EmployeeMapper.INSTANCE::employeeToEmployeeResponse).collect(Collectors.toList());
     }
 
     @PostMapping
