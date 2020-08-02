@@ -23,8 +23,9 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
 
 
-    public List<Employee> queryEmployees() {
-        return employeeRepository.findAll();
+    public List<EmployeeResponse> queryEmployees() {
+        return employeeRepository.findAll().stream()
+                .map(EmployeeMapper.INSTANCE::employeeToEmployeeResponse).collect(Collectors.toList());
     }
 
     public List<EmployeeResponse> queryEmployeesByGender(String gender) {

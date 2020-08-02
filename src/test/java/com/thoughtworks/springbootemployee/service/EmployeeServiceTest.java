@@ -40,7 +40,7 @@ class EmployeeServiceTest {
         when(employeeRepository.findAll()).thenReturn(emptyList());
 
         //when
-        List<Employee> employees = employeeService.queryEmployees();
+        List<EmployeeResponse> employees = employeeService.queryEmployees();
 
         //then
         assertNotNull(employees);
