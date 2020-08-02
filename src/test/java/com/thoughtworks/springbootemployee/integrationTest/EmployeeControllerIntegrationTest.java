@@ -47,15 +47,16 @@ public class EmployeeControllerIntegrationTest {
     @Test
     void should_return_employees_in_page_when_getEmployeeInPage_given_page_and_pageSize() throws Exception {
         //given
-        Company oocl = companyRepository.save(new Company(1, "oocl", 1, emptyList()));
-        Employee xiaoYi = employeeRepository.save(new Employee(1, "XIAOYI", 18, "Male", new BigDecimal(3000), oocl.getId()));
-        Employee xiaoWang = employeeRepository.save(new Employee(2, "xiaowang", 18, "Male", new BigDecimal(3000), oocl.getId()));
+        Company companyOOCL = companyRepository.save(new Company(1, "oocl", 1, emptyList()));
+        Employee employeeXiaoYi = employeeRepository.save(new Employee(1, "XIAOYI", 18, "Male", new BigDecimal(3000), companyOOCL.getId()));
+        employeeRepository.save(new Employee(2, "xiaowang", 18, "Male", new BigDecimal(3000), companyOOCL.getId()));
+
         //when
         mockMvc.perform(get("/employees").contentType(MediaType.APPLICATION_JSON)
                 .param("page", "1").param("pageSize", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content[0].id").value(xiaoYi.getId()));
+                .andExpect(jsonPath("$.content[0].id").value(employeeXiaoYi.getId()));
     }
 
     @Test
