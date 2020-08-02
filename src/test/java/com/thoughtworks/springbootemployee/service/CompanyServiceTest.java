@@ -109,7 +109,8 @@ class CompanyServiceTest {
         when(companyRepository.findById(COMPANY_ID)).thenReturn(Optional.of(getMockCompany()));
 
         //when
-        companyService.updateCompany(COMPANY_ID, getMockCompany());
+        CompanyRequest companyRequest = CompanyMapper.INSTANCE.companyToCompanyRequest(getMockCompany());
+        companyService.updateCompany(COMPANY_ID, companyRequest);
         //then
         verify(companyRepository).findById(COMPANY_ID);
         verify(companyRepository).save(isA(Company.class));
@@ -118,10 +119,11 @@ class CompanyServiceTest {
     @Test
     void should_throw_ILLEGALECXEPTION_when_updateCompany_given_() throws Exception {
         //given
+        CompanyRequest companyRequest = CompanyMapper.INSTANCE.companyToCompanyRequest(getMockCompany());
 
         //when
         Throwable exception = assertThrows(IllegalUpdateCompanyException.class,
-                () -> companyService.updateCompany(2, getMockCompany()));
+                () -> companyService.updateCompany(2, companyRequest));
 
         //then
         assertEquals(ExceptionMessage.ILLEGAL_UPDATE_COMPANY.getErrorMsg(), exception.getMessage());
@@ -130,9 +132,10 @@ class CompanyServiceTest {
     @Test
     void should_throw_NOSUCHDATAEXCEPTION_when_updateCompany_given_() {
         //given
+        CompanyRequest companyRequest = CompanyMapper.INSTANCE.companyToCompanyRequest(getMockCompany());
         when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.empty());
         //when
-        Throwable exception = assertThrows(NoSuchCompanyException.class, () -> companyService.updateCompany(COMPANY_ID, getMockCompany()));
+        Throwable exception = assertThrows(NoSuchCompanyException.class, () -> companyService.updateCompany(COMPANY_ID, companyRequest));
         //then
         assertEquals(ExceptionMessage.NO_SUCH_COMPANY.getErrorMsg(), exception.getMessage());
     }

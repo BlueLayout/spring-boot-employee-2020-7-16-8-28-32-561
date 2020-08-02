@@ -32,7 +32,7 @@ public class CompanyService {
         List<Company> companies = companyRepository.findAll();
         List<CompanyResponse> companyResponses = companies.stream().map(CompanyMapper.INSTANCE::companyToCompanyResponse)
                 .collect(Collectors.toList());
-        return new PageImpl<>(companyResponses,PageRequest.of(page-1, pageSize),companyResponses.size());
+        return new PageImpl<>(companyResponses, PageRequest.of(page - 1, pageSize), companyResponses.size());
     }
 
     public CompanyResponse getCompany(int id) {
@@ -41,7 +41,7 @@ public class CompanyService {
     }
 
 
-    public List<Employee> getEmployees(int companyId){
+    public List<Employee> getEmployees(int companyId) {
         Company company = companyRepository.findById(companyId).orElse(null);
         if (company == null) {
             throw new NoSuchCompanyException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg());
@@ -55,8 +55,8 @@ public class CompanyService {
         return CompanyMapper.INSTANCE.companyToCompanyResponse(companySave);
     }
 
-    public Company updateCompany(int companyId, Company company){
-        if (companyId != company.getId()) {
+    public CompanyResponse updateCompany(int companyId, CompanyRequest companyRequest) {
+        if (companyId != companyRequest.getId()) {
             throw new IllegalUpdateCompanyException(ExceptionMessage.ILLEGAL_UPDATE_COMPANY.getErrorMsg());
         }
 
@@ -65,22 +65,22 @@ public class CompanyService {
             throw new NoSuchCompanyException(ExceptionMessage.NO_SUCH_COMPANY.getErrorMsg());
         }
 
-        if (company.getCompanyName() != null) {
-            oldCompany.setCompanyName(company.getCompanyName());
+        if (companyRequest.getCompanyName() != null) {
+            oldCompany.setCompanyName(companyRequest.getCompanyName());
         }
 
-        if (company.getEmployeeNumber() > 0) {
-            oldCompany.setEmployeeNumber(company.getEmployeeNumber());
+        if (companyRequest.getEmployeeNumber() > 0) {
+            oldCompany.setEmployeeNumber(companyRequest.getEmployeeNumber());
         }
 
-        if (company.getEmployees().size() > 0) {
-            oldCompany.setEmployees(company.getEmployees());
+        if (companyRequest.getEmployees().size() > 0) {
+            oldCompany.setEmployees(companyRequest.getEmployees());
         }
 
-        return companyRepository.save(oldCompany);
+        return CompanyMapper.INSTANCE.companyToCompanyResponse(companyRepository.save(oldCompany));
     }
 
-    public void deleteCompany(int companyId){
+    public void deleteCompany(int companyId) {
         Company oldCompany = companyRepository.findById(companyId).orElse(null);
         if (Objects.isNull(oldCompany)) {
             throw new NoSuchCompanyException(ExceptionMessage.NO_SUCH_COMPANY.getErrorMsg());
