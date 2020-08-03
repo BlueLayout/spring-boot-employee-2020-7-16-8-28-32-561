@@ -4,7 +4,6 @@ import com.thoughtworks.springbootemployee.dto.CompanyRequest;
 import com.thoughtworks.springbootemployee.dto.CompanyResponse;
 import com.thoughtworks.springbootemployee.model.Company;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
 
