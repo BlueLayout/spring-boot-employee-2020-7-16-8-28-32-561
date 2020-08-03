@@ -5,6 +5,7 @@ import com.thoughtworks.springbootemployee.dto.CompanyResponse;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
@@ -16,6 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 public class CompanyMapperTest {
 
+    @Autowired
+    private CompanyMapper companyMapper;
+
     @Test
     void should_equals_when_company_to_companyResponse_given_company() {
         //given
@@ -24,7 +28,7 @@ public class CompanyMapperTest {
         Company company = new Company(1, "oocl", 1, employees);
 
         //when
-        CompanyResponse companyResponse = CompanyMapper.INSTANCE.companyToCompanyResponse(company);
+        CompanyResponse companyResponse = companyMapper.companyToCompanyResponse(company);
 
         //then
         assertEquals(company.getId(), companyResponse.getId());
@@ -41,7 +45,7 @@ public class CompanyMapperTest {
         CompanyResponse companyResponse = new CompanyResponse(1, "oocl", 1, employees);
 
         //when
-        Company company = CompanyMapper.INSTANCE.companyResponseToCompany(companyResponse);
+        Company company = companyMapper.companyResponseToCompany(companyResponse);
 
         //then
         assertEquals(company.getId(), companyResponse.getId());
@@ -58,7 +62,7 @@ public class CompanyMapperTest {
         Company company = new Company(1, "oocl", 1, employees);
 
         //when
-        CompanyRequest companyRequest = CompanyMapper.INSTANCE.companyToCompanyRequest(company);
+        CompanyRequest companyRequest = companyMapper.companyToCompanyRequest(company);
 
         //then
         assertEquals(company.getId(), companyRequest.getId());
@@ -76,7 +80,7 @@ public class CompanyMapperTest {
         CompanyRequest companyRequest = new CompanyRequest(1, "oocl", 1, employees);
 
         //when
-        Company company = CompanyMapper.INSTANCE.companyRequestToCompany(companyRequest);
+        Company company = companyMapper.companyRequestToCompany(companyRequest);
 
         //then
         assertEquals(company.getId(), companyRequest.getId());
