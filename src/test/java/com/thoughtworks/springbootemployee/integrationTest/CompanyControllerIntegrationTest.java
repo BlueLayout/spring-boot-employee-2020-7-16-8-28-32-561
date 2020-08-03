@@ -49,6 +49,7 @@ public class CompanyControllerIntegrationTest {
         //given
         Company company = new Company(1, "alibaba", 1, emptyList());
         companyRepository.save(company);
+        companyRepository.save(new Company(2, "oocl", 1, emptyList()));
 
         //when
         mockMvc.perform(get("/companies").contentType(MediaType.APPLICATION_JSON)
