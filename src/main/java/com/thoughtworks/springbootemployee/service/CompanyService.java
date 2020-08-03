@@ -81,10 +81,8 @@ public class CompanyService {
     }
 
     public void deleteCompany(int companyId) {
-        Company oldCompany = companyRepository.findById(companyId).orElse(null);
-        if (Objects.isNull(oldCompany)) {
-            throw new NoSuchCompanyException(ExceptionMessage.NO_SUCH_COMPANY.getErrorMsg());
-        }
+        companyRepository.findById(companyId)
+                .orElseThrow(()->new NoSuchCompanyException(ExceptionMessage.NO_SUCH_COMPANY.getErrorMsg()));
         companyRepository.deleteById(companyId);
     }
 }
