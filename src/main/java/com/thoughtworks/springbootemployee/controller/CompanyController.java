@@ -20,6 +20,9 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
+    @Autowired
+    private EmployeeMapper employeeMapper;
+
     @GetMapping(params = {"page", "pageSize"})
     public Page<CompanyResponse> getCompaniesInPage(@RequestParam(value = "page") Integer page,
                                                     @RequestParam(value = "pageSize") Integer pageSize) {
@@ -39,7 +42,7 @@ public class CompanyController {
     @GetMapping("/{id}/employees")
     public List<EmployeeResponse> getEmployeeFromCompany(@PathVariable int id) {
         return companyService.getCompany(id).getEmployees()
-                .stream().map(EmployeeMapper.INSTANCE::employeeToEmployeeResponse).collect(Collectors.toList());
+                .stream().map(employeeMapper::employeeToEmployeeResponse).collect(Collectors.toList());
     }
 
     @PostMapping
