@@ -34,18 +34,19 @@ public class CompanyService {
     }
 
     public Page<CompanyResponse> getCompaniesPage(int page, int pageSize) {
-        return companyRepository.findAll(PageRequest.of(page-1, pageSize)).map(companyMapper::companyToCompanyResponse);
+        return companyRepository.findAll(PageRequest.of(page - 1, pageSize)).map(companyMapper::companyToCompanyResponse);
     }
 
     public CompanyResponse getCompany(int id) {
-        Company company = companyRepository.findById(id).orElse(null);
+        Company company = companyRepository.findById(id)
+                .orElseThrow(() -> new NoSuchCompanyException(ExceptionMessage.NO_SUCH_COMPANY.getErrorMsg()));
         return companyMapper.companyToCompanyResponse(company);
     }
 
 
     public List<EmployeeResponse> getEmployees(int companyId) {
         Company company = companyRepository.findById(companyId)
-                .orElseThrow(()->new NoSuchCompanyException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg()));
+                .orElseThrow(() -> new NoSuchCompanyException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg()));
         return company.getEmployees().stream().map(employee -> employeeMapper.employeeToEmployeeResponse(employee))
                 .collect(Collectors.toList());
     }
