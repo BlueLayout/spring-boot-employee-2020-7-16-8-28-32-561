@@ -36,11 +36,8 @@ public class EmployeeService {
     }
 
     public Page<EmployeeResponse> queryEmployeesByPage(int currentPage, int pageSize) {
-        List<Employee> employees = employeeRepository.findAll();
-        List<EmployeeResponse> employeeResponses = employees.stream().map(EmployeeMapper.INSTANCE::employeeToEmployeeResponse)
-                .collect(Collectors.toList());
-        List<EmployeeResponse> employeeResponsesSubList = new PageUtils<EmployeeResponse>().getPage(employeeResponses,currentPage,pageSize);
-        return new PageImpl<>(employeeResponsesSubList, PageRequest.of(currentPage, pageSize), employeeResponsesSubList.size());
+        return employeeRepository.findAll(PageRequest.of(currentPage-1,pageSize))
+                .map(EmployeeMapper.INSTANCE::employeeToEmployeeResponse);
     }
 
     public EmployeeResponse queryEmployee(int employeeId) {

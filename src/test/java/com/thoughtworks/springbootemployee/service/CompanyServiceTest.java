@@ -62,7 +62,7 @@ class CompanyServiceTest {
         //when
         companyService.getCompaniesPage(page, pageSize);
         //then
-        verify(companyRepository).findAll();
+        verify(companyRepository).findAll(isA(PageRequest.class));
     }
 
     @Test
