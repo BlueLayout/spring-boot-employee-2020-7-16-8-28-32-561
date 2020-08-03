@@ -8,6 +8,7 @@ import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
+import com.thoughtworks.springbootemployee.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -38,7 +39,8 @@ public class EmployeeService {
         List<Employee> employees = employeeRepository.findAll();
         List<EmployeeResponse> employeeResponses = employees.stream().map(EmployeeMapper.INSTANCE::employeeToEmployeeResponse)
                 .collect(Collectors.toList());
-        return new PageImpl<>(employeeResponses, PageRequest.of(currentPage - 1, pageSize), employeeResponses.size());
+        List<EmployeeResponse> employeeResponsesSubList = new PageUtils<EmployeeResponse>().getPage(employeeResponses,currentPage,pageSize);
+        return new PageImpl<>(employeeResponsesSubList, PageRequest.of(currentPage, pageSize), employeeResponsesSubList.size());
     }
 
     public EmployeeResponse queryEmployee(int employeeId) {
