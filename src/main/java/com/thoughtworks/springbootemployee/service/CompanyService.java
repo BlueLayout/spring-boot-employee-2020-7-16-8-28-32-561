@@ -44,10 +44,8 @@ public class CompanyService {
 
 
     public List<EmployeeResponse> getEmployees(int companyId) {
-        Company company = companyRepository.findById(companyId).orElse(null);
-        if (company == null) {
-            throw new NoSuchCompanyException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg());
-        }
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(()->new NoSuchCompanyException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg()));
         return company.getEmployees().stream().map(employee -> employeeMapper.employeeToEmployeeResponse(employee))
                 .collect(Collectors.toList());
     }
