@@ -41,7 +41,8 @@ public class EmployeeService {
     }
 
     public EmployeeResponse queryEmployee(int employeeId) {
-        Employee employee = employeeRepository.findById(employeeId).orElse(null);
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(()->new NoSuchEmployeeException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg()));
         return employeeMapper.employeeToEmployeeResponse(employee);
     }
 
