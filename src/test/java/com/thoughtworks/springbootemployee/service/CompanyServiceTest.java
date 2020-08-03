@@ -5,6 +5,7 @@ import com.thoughtworks.springbootemployee.Exception.NoSuchCompanyException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.dto.CompanyRequest;
 import com.thoughtworks.springbootemployee.dto.CompanyResponse;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
@@ -84,9 +85,9 @@ class CompanyServiceTest {
         when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.of(getMockCompany()));
 
         //when
-        List<Employee> employees = companyService.getEmployees(COMPANY_ID);
+        List<EmployeeResponse> employeeResponses = companyService.getEmployees(COMPANY_ID);
         //then
-        assertEquals(10, employees.size());
+        assertEquals(10, employeeResponses.size());
     }
 
     @Test

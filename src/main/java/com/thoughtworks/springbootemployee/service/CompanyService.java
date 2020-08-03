@@ -5,9 +5,10 @@ import com.thoughtworks.springbootemployee.Exception.NoSuchCompanyException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.dto.CompanyRequest;
 import com.thoughtworks.springbootemployee.dto.CompanyResponse;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Company;
-import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,8 @@ public class CompanyService {
 
     @Autowired
     private CompanyMapper companyMapper;
+    @Autowired
+    private EmployeeMapper employeeMapper;
 
     public List<CompanyResponse> getCompanies() {
         return companyRepository.findAll().stream().map(companyMapper::companyToCompanyResponse).collect(Collectors.toList());
@@ -40,12 +43,13 @@ public class CompanyService {
     }
 
 
-    public List<Employee> getEmployees(int companyId) {
+    public List<EmployeeResponse> getEmployees(int companyId) {
         Company company = companyRepository.findById(companyId).orElse(null);
         if (company == null) {
             throw new NoSuchCompanyException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg());
         }
-        return company.getEmployees();
+        return company.getEmployees().stream().map(employee -> employeeMapper.employeeToEmployeeResponse(employee))
+                .collect(Collectors.toList());
     }
 
     public CompanyResponse createCompany(CompanyRequest companyRequest) {
