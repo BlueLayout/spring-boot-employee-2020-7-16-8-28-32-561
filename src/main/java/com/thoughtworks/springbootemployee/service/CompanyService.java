@@ -23,17 +23,20 @@ public class CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @Autowired
+    private CompanyMapper companyMapper;
+
     public List<CompanyResponse> getCompanies() {
-        return companyRepository.findAll().stream().map(CompanyMapper.INSTANCE::companyToCompanyResponse).collect(Collectors.toList());
+        return companyRepository.findAll().stream().map(companyMapper::companyToCompanyResponse).collect(Collectors.toList());
     }
 
     public Page<CompanyResponse> getCompaniesPage(int page, int pageSize) {
-        return companyRepository.findAll(PageRequest.of(page-1, pageSize)).map(CompanyMapper.INSTANCE::companyToCompanyResponse);
+        return companyRepository.findAll(PageRequest.of(page-1, pageSize)).map(companyMapper::companyToCompanyResponse);
     }
 
     public CompanyResponse getCompany(int id) {
         Company company = companyRepository.findById(id).orElse(null);
-        return CompanyMapper.INSTANCE.companyToCompanyResponse(company);
+        return companyMapper.companyToCompanyResponse(company);
     }
 
 
@@ -46,9 +49,9 @@ public class CompanyService {
     }
 
     public CompanyResponse createCompany(CompanyRequest companyRequest) {
-        Company company = CompanyMapper.INSTANCE.companyRequestToCompany(companyRequest);
+        Company company = companyMapper.companyRequestToCompany(companyRequest);
         Company companySave = companyRepository.save(company);
-        return CompanyMapper.INSTANCE.companyToCompanyResponse(companySave);
+        return companyMapper.companyToCompanyResponse(companySave);
     }
 
     public CompanyResponse updateCompany(int companyId, CompanyRequest companyRequest) {
@@ -73,7 +76,7 @@ public class CompanyService {
             oldCompany.setEmployees(companyRequest.getEmployees());
         }
 
-        return CompanyMapper.INSTANCE.companyToCompanyResponse(companyRepository.save(oldCompany));
+        return companyMapper.companyToCompanyResponse(companyRepository.save(oldCompany));
     }
 
     public void deleteCompany(int companyId) {
