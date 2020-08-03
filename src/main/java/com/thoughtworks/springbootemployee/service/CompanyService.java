@@ -62,10 +62,8 @@ public class CompanyService {
             throw new IllegalUpdateCompanyException(ExceptionMessage.ILLEGAL_UPDATE_COMPANY.getErrorMsg());
         }
 
-        Company oldCompany = companyRepository.findById(companyId).orElse(null);
-        if (oldCompany == null) {
-            throw new NoSuchCompanyException(ExceptionMessage.NO_SUCH_COMPANY.getErrorMsg());
-        }
+        Company oldCompany = companyRepository.findById(companyId)
+                .orElseThrow(()->new NoSuchCompanyException(ExceptionMessage.NO_SUCH_COMPANY.getErrorMsg()));
 
         if (companyRequest.getCompanyName() != null) {
             oldCompany.setCompanyName(companyRequest.getCompanyName());
