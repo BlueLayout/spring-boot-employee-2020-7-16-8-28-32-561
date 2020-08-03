@@ -69,7 +69,7 @@ public class CompanyService {
             oldCompany.setCompanyName(companyRequest.getCompanyName());
         }
 
-        if (companyRequest.getEmployeeNumber() > 0) {
+        if (companyRequest.getEmployeeNumber() > -1) {
             oldCompany.setEmployeeNumber(companyRequest.getEmployeeNumber());
         }
 
