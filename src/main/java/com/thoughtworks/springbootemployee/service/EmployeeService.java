@@ -8,10 +8,8 @@ import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
-import com.thoughtworks.springbootemployee.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +34,7 @@ public class EmployeeService {
     }
 
     public Page<EmployeeResponse> queryEmployeesByPage(int currentPage, int pageSize) {
-        return employeeRepository.findAll(PageRequest.of(currentPage-1,pageSize))
+        return employeeRepository.findAll(PageRequest.of(currentPage - 1, pageSize))
                 .map(EmployeeMapper.INSTANCE::employeeToEmployeeResponse);
     }
 
