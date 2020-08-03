@@ -13,6 +13,7 @@ import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -39,6 +40,9 @@ class CompanyServiceTest {
 
     @Mock
     CompanyRepository companyRepository;
+
+    @Autowired
+    private CompanyMapper companyMapper;
 
     @Test
     void should_return_companies_when_getCompanies_given_() {
@@ -96,7 +100,7 @@ class CompanyServiceTest {
         when(companyRepository.save(any())).thenReturn(any());
 
         //when
-        CompanyRequest companyRequest = CompanyMapper.INSTANCE.companyToCompanyRequest(getMockCompany());
+        CompanyRequest companyRequest = companyMapper.companyToCompanyRequest(getMockCompany());
         companyService.createCompany(companyRequest);
 
         //then
@@ -110,7 +114,7 @@ class CompanyServiceTest {
         when(companyRepository.findById(COMPANY_ID)).thenReturn(Optional.of(getMockCompany()));
 
         //when
-        CompanyRequest companyRequest = CompanyMapper.INSTANCE.companyToCompanyRequest(getMockCompany());
+        CompanyRequest companyRequest = companyMapper.companyToCompanyRequest(getMockCompany());
         companyService.updateCompany(COMPANY_ID, companyRequest);
         //then
         verify(companyRepository).findById(COMPANY_ID);
@@ -120,7 +124,7 @@ class CompanyServiceTest {
     @Test
     void should_throw_ILLEGALECXEPTION_when_updateCompany_given_() throws Exception {
         //given
-        CompanyRequest companyRequest = CompanyMapper.INSTANCE.companyToCompanyRequest(getMockCompany());
+        CompanyRequest companyRequest = companyMapper.companyToCompanyRequest(getMockCompany());
 
         //when
         Throwable exception = assertThrows(IllegalUpdateCompanyException.class,
@@ -133,7 +137,7 @@ class CompanyServiceTest {
     @Test
     void should_throw_NOSUCHDATAEXCEPTION_when_updateCompany_given_() {
         //given
-        CompanyRequest companyRequest = CompanyMapper.INSTANCE.companyToCompanyRequest(getMockCompany());
+        CompanyRequest companyRequest = companyMapper.companyToCompanyRequest(getMockCompany());
         when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.empty());
         //when
         Throwable exception = assertThrows(NoSuchCompanyException.class, () -> companyService.updateCompany(COMPANY_ID, companyRequest));

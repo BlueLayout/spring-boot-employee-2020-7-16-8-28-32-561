@@ -12,8 +12,6 @@ import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
     nullValueCheckStrategy = ALWAYS)
 public interface CompanyMapper {
 
-    CompanyMapper INSTANCE = Mappers.getMapper(CompanyMapper.class);
-
     CompanyResponse companyToCompanyResponse(Company company);
 
     Company companyResponseToCompany(CompanyResponse companyResponse);

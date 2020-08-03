@@ -14,13 +14,9 @@ import static org.mapstruct.NullValueMappingStrategy.RETURN_DEFAULT;
     nullValueCheckStrategy = ALWAYS)
 public interface EmployeeMapper {
 
-    EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
-
     EmployeeResponse employeeToEmployeeResponse(Employee employee);
 
-
     Employee employeeResponseToEmployee(EmployeeResponse employeeResponse);
-
 
     EmployeeRequest employeeToEmployeeRequest(Employee employee);
 

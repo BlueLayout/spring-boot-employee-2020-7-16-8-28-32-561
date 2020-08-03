@@ -10,6 +10,7 @@ import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -36,6 +37,8 @@ class EmployeeServiceTest {
     @Mock
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private EmployeeMapper employeeMapper;
     @Test
     void should_return_employees_when_getEmployees_given_() {
         //given
@@ -92,7 +95,7 @@ class EmployeeServiceTest {
         when(employeeRepository.save(any())).thenReturn(any());
 
         //when
-        EmployeeRequest employeeRequest = EmployeeMapper.INSTANCE.employeeToEmployeeRequest(new Employee(11, "tom chen", 18, "Male", new BigDecimal(9999), 1));
+        EmployeeRequest employeeRequest = employeeMapper.employeeToEmployeeRequest(new Employee(11, "tom chen", 18, "Male", new BigDecimal(9999), 1));
         employeeService.createEmployee(employeeRequest);
 
         //then
@@ -104,7 +107,7 @@ class EmployeeServiceTest {
         //given
         when(employeeRepository.save(any())).thenReturn(null);
         //when
-        EmployeeRequest employeeRequest = EmployeeMapper.INSTANCE.employeeToEmployeeRequest(new Employee(11, "tom chen", 18, "Male", new BigDecimal(9999), 1));
+        EmployeeRequest employeeRequest = employeeMapper.employeeToEmployeeRequest(new Employee(11, "tom chen", 18, "Male", new BigDecimal(9999), 1));
         EmployeeResponse employeeResponse = employeeService.createEmployee(employeeRequest);
         //then
         assertNull(employeeResponse);
@@ -118,7 +121,7 @@ class EmployeeServiceTest {
         when(employeeRepository.findById(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
 
         //when
-        EmployeeRequest employeeRequest = EmployeeMapper.INSTANCE.employeeToEmployeeRequest(employee);
+        EmployeeRequest employeeRequest = employeeMapper.employeeToEmployeeRequest(employee);
         EmployeeResponse employeeUpdated = employeeService.updateEmployee(EMPLOYEE_ID, employeeRequest);
 
         //then
