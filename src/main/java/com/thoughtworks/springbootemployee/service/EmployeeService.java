@@ -56,10 +56,8 @@ public class EmployeeService {
         if (!id.equals(employeeRequest.getId())) {
             throw new IllegalUpdateEmployeeException(ExceptionMessage.ILLEGAL_UPDATE_EMPLOYEE.getErrorMsg());
         }
-        Employee oldEmployee = employeeRepository.findById(id).orElse(null);
-        if (oldEmployee == null) {
-            throw new NoSuchEmployeeException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg());
-        }
+        Employee oldEmployee = employeeRepository.findById(id)
+                .orElseThrow(()->new NoSuchEmployeeException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg()));
         if (employeeRequest.getName() != null) {
             oldEmployee.setName(employeeRequest.getName());
         }
@@ -76,10 +74,8 @@ public class EmployeeService {
     }
 
     public void deleteEmployee(int employeeId) {
-        Employee employee = employeeRepository.findById(employeeId).orElse(null);
-        if (employee == null) {
-            throw new NoSuchEmployeeException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg());
-        }
+        employeeRepository.findById(employeeId)
+                .orElseThrow(()->new NoSuchEmployeeException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg()));
         employeeRepository.deleteById(employeeId);
     }
 
