@@ -9,6 +9,7 @@ import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import com.thoughtworks.springbootemployee.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -32,7 +33,8 @@ public class CompanyService {
         List<Company> companies = companyRepository.findAll();
         List<CompanyResponse> companyResponses = companies.stream().map(CompanyMapper.INSTANCE::companyToCompanyResponse)
                 .collect(Collectors.toList());
-        return new PageImpl<>(companyResponses, PageRequest.of(page - 1, pageSize), companyResponses.size());
+        List<CompanyResponse> companyResponseSubList = new PageUtils<CompanyResponse>().getPage(companyResponses, page, pageSize);
+        return new PageImpl<>(companyResponseSubList, PageRequest.of(page, pageSize), companyResponseSubList.size());
     }
 
     public CompanyResponse getCompany(int id) {
