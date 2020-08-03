@@ -30,11 +30,7 @@ public class CompanyService {
     }
 
     public Page<CompanyResponse> getCompaniesPage(int page, int pageSize) {
-        List<Company> companies = companyRepository.findAll();
-        List<CompanyResponse> companyResponses = companies.stream().map(CompanyMapper.INSTANCE::companyToCompanyResponse)
-                .collect(Collectors.toList());
-        List<CompanyResponse> companyResponseSubList = new PageUtils<CompanyResponse>().getPage(companyResponses, page, pageSize);
-        return new PageImpl<>(companyResponseSubList, PageRequest.of(page, pageSize), companyResponseSubList.size());
+        return companyRepository.findAll(PageRequest.of(page-1, pageSize)).map(CompanyMapper.INSTANCE::companyToCompanyResponse);
     }
 
     public CompanyResponse getCompany(int id) {
