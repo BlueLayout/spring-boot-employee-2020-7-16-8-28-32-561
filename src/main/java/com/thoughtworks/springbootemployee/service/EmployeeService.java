@@ -22,31 +22,33 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private EmployeeMapper employeeMapper;
 
     public List<EmployeeResponse> queryEmployees() {
         return employeeRepository.findAll().stream()
-                .map(EmployeeMapper.INSTANCE::employeeToEmployeeResponse).collect(Collectors.toList());
+                .map(employeeMapper::employeeToEmployeeResponse).collect(Collectors.toList());
     }
 
     public List<EmployeeResponse> queryEmployeesByGender(String gender) {
         return employeeRepository.findAllByGender(gender).stream()
-                .map(EmployeeMapper.INSTANCE::employeeToEmployeeResponse).collect(Collectors.toList());
+                .map(employeeMapper::employeeToEmployeeResponse).collect(Collectors.toList());
     }
 
     public Page<EmployeeResponse> queryEmployeesByPage(int currentPage, int pageSize) {
         return employeeRepository.findAll(PageRequest.of(currentPage - 1, pageSize))
-                .map(EmployeeMapper.INSTANCE::employeeToEmployeeResponse);
+                .map(employeeMapper::employeeToEmployeeResponse);
     }
 
     public EmployeeResponse queryEmployee(int employeeId) {
         Employee employee = employeeRepository.findById(employeeId).orElse(null);
-        return EmployeeMapper.INSTANCE.employeeToEmployeeResponse(employee);
+        return employeeMapper.employeeToEmployeeResponse(employee);
     }
 
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
-        Employee employee = EmployeeMapper.INSTANCE.employeeRequestToEmployee(employeeRequest);
+        Employee employee = employeeMapper.employeeRequestToEmployee(employeeRequest);
         Employee employeeSave = employeeRepository.save(employee);
-        return EmployeeMapper.INSTANCE.employeeToEmployeeResponse(employeeSave);
+        return employeeMapper.employeeToEmployeeResponse(employeeSave);
     }
 
     public EmployeeResponse updateEmployee(Integer id, EmployeeRequest employeeRequest) {
@@ -69,7 +71,7 @@ public class EmployeeService {
         if (employeeRequest.getSalary() != null) {
             oldEmployee.setSalary(employeeRequest.getSalary());
         }
-        return EmployeeMapper.INSTANCE.employeeToEmployeeResponse(employeeRepository.save(oldEmployee));
+        return employeeMapper.employeeToEmployeeResponse(employeeRepository.save(oldEmployee));
     }
 
     public void deleteEmployee(int employeeId) {
